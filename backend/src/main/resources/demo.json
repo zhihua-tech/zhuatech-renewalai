@@ -1,0 +1,65 @@
+[
+  {
+    "op": "create",
+    "as": "customer",
+    "module": "customers",
+    "data": {
+      "name": "演示制造客户",
+      "tier": "A",
+      "owner": "客户经理"
+    }
+  },
+  {
+    "op": "create",
+    "as": "contract",
+    "module": "contracts",
+    "data": {
+      "customer": "$customer.id",
+      "startDate": "$today-100",
+      "endDate": "$today+45",
+      "annualValue": 120000,
+      "noticeDays": 60
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "activate",
+    "data": {}
+  },
+  {
+    "op": "create",
+    "as": "signal",
+    "module": "signals",
+    "data": {
+      "contract": "$contract.id",
+      "signalDate": "$today",
+      "utilization": 30,
+      "openTickets": 4,
+      "overdueAmount": 500
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "evaluate",
+    "data": {}
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "plan",
+    "data": {
+      "actionOwner": "客户经理",
+      "actionDue": "$today+14",
+      "playbook": "优先处理服务工单"
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "approve",
+    "data": {},
+    "role": "reviewer"
+  }
+]

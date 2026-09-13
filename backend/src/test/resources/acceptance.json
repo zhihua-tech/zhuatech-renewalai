@@ -1,0 +1,145 @@
+[
+  {
+    "op": "create",
+    "as": "customer",
+    "module": "customers",
+    "data": {
+      "name": "华东制造集团",
+      "tier": "A",
+      "owner": "客户成功经理"
+    }
+  },
+  {
+    "op": "create",
+    "as": "contract",
+    "module": "contracts",
+    "data": {
+      "customer": "$customer.id",
+      "startDate": "$today-100",
+      "endDate": "$today+45",
+      "annualValue": 120000,
+      "noticeDays": 60
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "evaluate",
+    "data": {},
+    "error": 409
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "activate",
+    "data": {}
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "evaluate",
+    "data": {},
+    "error": 409
+  },
+  {
+    "op": "create",
+    "as": "signal",
+    "module": "signals",
+    "data": {
+      "contract": "$contract.id",
+      "signalDate": "$today",
+      "utilization": 30,
+      "openTickets": 4,
+      "overdueAmount": 500
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "evaluate",
+    "data": {}
+  },
+  {
+    "op": "check",
+    "target": "contract",
+    "expect": {
+      "state": "AT_RISK",
+      "data.riskScore": 100
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "plan",
+    "data": {
+      "actionOwner": "客户成功经理",
+      "actionDue": "$today+14",
+      "playbook": "关闭工单并复盘席位使用"
+    }
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "renew",
+    "data": {
+      "newEndDate": "$today+410",
+      "newAnnualValue": 125000
+    },
+    "role": "admin",
+    "error": 409
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "approve",
+    "data": {},
+    "role": "reviewer"
+  },
+  {
+    "op": "action",
+    "target": "contract",
+    "action": "renew",
+    "data": {
+      "newEndDate": "$today+410",
+      "newAnnualValue": 125000
+    },
+    "role": "admin"
+  },
+  {
+    "op": "check",
+    "target": "contract",
+    "expect": {
+      "state": "RENEWED",
+      "data.renewedAnnualValue": 125000
+    }
+  },
+  {
+    "op": "find",
+    "as": "renewal",
+    "module": "renewals",
+    "where": {
+      "data.contract": "$contract.id"
+    }
+  },
+  {
+    "op": "metric",
+    "expect": {
+      "风险续约": 0,
+      "待审计划": 0,
+      "已登记续签": 1
+    }
+  },
+  {
+    "op": "create",
+    "as": "lateSignal",
+    "module": "signals",
+    "data": {
+      "contract": "$contract.id",
+      "signalDate": "$today",
+      "utilization": 70,
+      "openTickets": 0,
+      "overdueAmount": 0
+    },
+    "error": 409
+  }
+]
