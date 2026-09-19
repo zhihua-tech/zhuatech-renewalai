@@ -6,12 +6,28 @@ import java.time.*;
 import static cn.zhuatech.renewalai.Model.*;
 import static cn.zhuatech.renewalai.Engine.*;
 
-/** 续约评分接口；默认实现本地可运行，不依赖模型服务。 */
+/**
+ * 续约评分接口；默认实现本地可运行，不依赖模型服务。
+ *
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 public interface InsightProvider {
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  record Insight(int score,List<String> factors,List<String> recommendations){}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  Insight assess(Row contract,Row signal,LocalDate today);
 }
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @Component class LocalInsightProvider implements InsightProvider {
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public Insight assess(Row contract,Row signal,LocalDate today){
   List<String> factors=new ArrayList<>(),recommendations=new ArrayList<>();int score=0;
   long days=java.time.temporal.ChronoUnit.DAYS.between(today,date(contract.data(),"endDate"));

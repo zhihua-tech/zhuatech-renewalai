@@ -6,10 +6,22 @@ import java.time.*;
 import static cn.zhuatech.renewalai.Model.*;
 import static cn.zhuatech.renewalai.Engine.*;
 
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @Component public class Domain {
  private final InsightProvider insight;
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public Domain(InsightProvider insight){this.insight=insight;}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  static String text(Row r,String key){return txt(r.data(),key);}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public void create(Engine e,User u,String module,Map<String,Object>d){
   switch(module){
    case "customers" -> require(e.all(u,"customers").stream().noneMatch(x->text(x,"name").equalsIgnoreCase(txt(d,"name"))),"客户名称重复");
@@ -23,9 +35,15 @@ import static cn.zhuatech.renewalai.Engine.*;
    }
   }
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public void edit(Engine e,User u,Row r,Map<String,Object>d){
   if(r.module().equals("contracts")){e.ref(u,d,"customer","customers");require(date(d,"endDate").isAfter(date(d,"startDate")),"到期日须晚于开始日");}
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public String action(Engine e,User u,Row r,String action,Map<String,Object>i,Map<String,Object>d){
   switch(r.module()+"."+action){
    case "contracts.activate" -> {require(!date(d,"startDate").isAfter(LocalDate.now())&&date(d,"endDate").isAfter(LocalDate.now()),"合同有效期不覆盖当前日期");d.put("activatedAt",Instant.now().toString());}
@@ -48,5 +66,8 @@ import static cn.zhuatech.renewalai.Engine.*;
   }
   return null;
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public Map<String,Object> metrics(Engine e,User u){return Map.of("风险续约",e.all(u,"contracts").stream().filter(x->x.state().equals("AT_RISK")).count(),"待审计划",e.all(u,"contracts").stream().filter(x->x.state().equals("PLAN_REVIEW")).count(),"已登记续签",e.all(u,"renewals").size());}
 }
